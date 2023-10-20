@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   }) // end of DOMContentLoaded
   
-  let date_1 = new Date('4/5/2023');
+  let date_1 = new Date('10/20/2023');
   let date_2 = new Date();
   
   const days = (date_1, date_2) =>{
