@@ -1,4 +1,4 @@
-   const birthdayTime = document.querySelector('#birthdayTime')
+ const birthdayTime = document.querySelector('#birthdayTime')
     const countdownContainer = document.querySelector('#countdown')
     const daysCountdown = document.querySelector('#days')
     const hoursCountdown = document.querySelector('#hours')
@@ -75,4 +75,3 @@
     document.getElementById("hrt").innerHTML = (Math.abs(daysHRT) / 30).toFixed(0) + " months passed since hrt";
     document.getElementById("img1").src="https://media.tenor.com/jY84qSwONRwAAAAM/anime-happy.gif";
 }
-
