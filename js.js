@@ -29,7 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const displayMinutes = minutes % 60;
     const displaySeconds = seconds % 60;
 
-    if (now.getMonth() === 9 && now.getDate() === 20) {
+    if (
+      now.getFullYear() === eventDate.getFullYear() &&
+      now.getMonth() === 9 &&
+      now.getDate() === 20
+    ) {
       console.log('Happy HRT Anniversary!');
 
       countdownContainer.style.display = 'none';
@@ -59,7 +63,7 @@ if (daysHRT > 0) {
   document.getElementById('hrt').innerHTML = Math.abs(daysHRT) + ' days passed since HRT';
   document.getElementById('img1').src = 'https://media.tenor.com/jY84qSwONRwAAAAM/anime-happy.gif';
 } else {
-  const monthsSinceHRT = Math.ceil(daysHRT / 30);
+  const monthsSinceHRT = Math.floor(daysHRT / 30);
   document.getElementById('hrt').innerHTML = monthsSinceHRT + ' months passed since HRT';
   document.getElementById('img1').src = 'https://media.tenor.com/jY84qSwONRwAAAAM/anime-happy.gif';
 }
