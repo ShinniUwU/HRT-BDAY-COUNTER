@@ -9,18 +9,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentTime = new Date();
     let yearOfTheEvent = currentTime.getFullYear();
     
-    // Set the event date and time in Bulgarian time zone (UTC+3)
-    let eventDate = new Date(Date.UTC(yearOfTheEvent, 3 - 1, 6, 0, 0, 0)); // Month is 0-indexed
+    // Set the event date to April 5th
+    let eventDate = new Date(yearOfTheEvent, 3 - 1, 5); // Month is 0-indexed
 
-    const isItApril5th = currentTime.getMonth() === 3 - 1 && currentTime.getDate() === 6;
+    const isItApril5th = currentTime.getMonth() === 3 - 1 && currentTime.getDate() === 5;
 
     function countdown() {
         const now = new Date();
 
         if (now > eventDate) {
-            eventDate = new Date(Date.UTC(yearOfTheEvent + 1, 3 - 1, 6, 0, 0, 0));
-        } else if (now.getUTCFullYear() === eventDate.getUTCFullYear() + 1) {
-            eventDate = new Date(Date.UTC(now.getUTCFullYear(), 3 - 1, 6, 0, 0, 0));
+            eventDate = new Date(yearOfTheEvent + 1, 3 - 1, 5);
+        } else if (now.getMonth() === 3 - 1 && now.getDate() === 5 && now.getFullYear() === eventDate.getFullYear() + 1) {
+            eventDate = new Date(now.getFullYear(), 3 - 1, 5);
         }
 
         const currentTime = now.getTime();
