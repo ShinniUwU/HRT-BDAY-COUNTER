@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const birthdayTime = document.querySelector('#birthdayTime');
-    const hrtTime = document.querySelector('#hrtTime');
+    const hrtTime = document.querySelector('#hrt');
     const countdownContainer = document.querySelector('#countdown');
     const daysCountdown = document.querySelector('#days');
     const hoursCountdown = document.querySelector('#hours');
@@ -63,5 +63,5 @@ document.addEventListener('DOMContentLoaded', function() {
         return totalDays;
     };
 
-    hrtTime.textContent = daysSinceHRT(hrtStartDate, currentDate) + " days since HRT";
+    hrtTime.textContent = daysSinceHRT(hrtStartDate, currentDate) + " days of HRT";
 });
