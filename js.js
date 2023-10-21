@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const currentTime = new Date();
     let yearOfTheEvent = currentTime.getFullYear();
-    
-    // Set the event date to April 5th
+
+    // Set the event date to April 5th for birthday
     let birthdayDate = new Date(yearOfTheEvent, 3 - 1, 5); // Month is 0-indexed
 
     const isItApril5th = currentTime.getMonth() === 3 - 1 && currentTime.getDate() === 5;
@@ -53,15 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     birthdayCountdown();
 
-    // HRT Countdown
+    // Set the start date for HRT
     let hrtStartDate = new Date('10/20/2023');
     let currentDate = new Date();
 
-    const daysUntilHRT = (date1, date2) => {
-        let difference = date1.getTime() - date2.getTime();
-        let totalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    const daysSinceHRT = (date1, date2) => {
+        let difference = date2.getTime() - date1.getTime();
+        let totalDays = Math.floor(difference / (1000 * 3600 * 24));
         return totalDays;
     };
 
-    hrtTime.textContent = daysUntilHRT(hrtStartDate, currentDate) + " days since HRT";
+    hrtTime.textContent = daysSinceHRT(hrtStartDate, currentDate) + " days since HRT";
 });
