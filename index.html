@@ -1,55 +1,198 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>HRT & BDAY COUNTER</title>
-      <link rel="stylesheet" href="css.css">
-      <link rel="icon" type="image/x-icon" href="https://i.ibb.co/MVByQfj/27133-removebg-preview.png">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRT & BDAY COUNTER</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/MVByQfj/27133-removebg-preview.png">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  </head>
-  <body data-aos="fade-up" data-aos-duration="500">
-    
-      <h1>My time & day right now</h1>
-      <div class="thetimenow-embeddable-clock" data-type="clock" data-font-color="#000000" data-border-color="#black" data-background-color="black" data-font-size="60" data-location-type="country" data-location-id="188" > <a href="https://www.thetimenow.com/bulgaria" rel="nofollow" target="_blank">© The Time Now</a> </div>
-  <script type="text/javascript" src="https://www.thetimenow.com/ttn-embed.min.js"></script>
-      
-  <div id="countdown">
-      <table class="countdownContainer">
-        <tr class="info">
-          <td colspan="4" class="info">Days unitil bday</td>
-        </tr>
-          <td id="days">120</td>
-          <td id="hours">4</td>
-          <td id="minutes">15</td>
-          <td id="seconds">32</td>
-        </tr>
 
-        <tr>
-          <td>Days</td>
-          <td>Hours</td>
-          <td>Minutes</td>
-          <td>Seconds</td>
-        </tr>
-      </table>
+    <style>
+        html {
+            background-color: black;
+        }
+
+        * {
+            align-items: center !important;
+            text-align: center;
+            color: white;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        a {
+            visibility: hidden;
+        }
+
+        div.embed-clock-copyright {
+            background-color: black !important;
+        }
+
+        table {
+            display: inline;
+        }
+
+        #hrt,
+        #switchedTime {
+            padding-top: 20px;
+        }
+
+        img {
+            width: 300px;
+            height: 300px;
+            border-radius: 30px;
+        }
+
+        #switchedTime {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Add mobile responsiveness */
+        @media only screen and (max-width: 600px) {
+            .info-button,
+            .info-box {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+
+            .info-button {
+                top: 2%;
+                right: 2%;
+            }
+
+            .info-box {
+                bottom: 2%;
+                right: 2%;
+            }
+        }
+
+        @media only screen and (max-width: 1024px) {
+            /* Surface Pro 7 width */
+            .countdownContainer,
+            #hrt,
+            #switchedTime,
+            #chatContent {
+                font-size: 24px;
+            }
+
+            #chatBox {
+                right: 20px;
+                bottom: 20px;
+            }
+
+            #closeChat {
+                font-size: 14px;
+            }
+
+            #switchedTime i {
+                cursor: pointer;
+            }
+        }
+
+        #chatBox {
+            display: none;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        #closeChat {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body data-aos="fade-up" data-aos-duration="500">
+
+    <h1>My time & day right now</h1>
+    <div class="thetimenow-embeddable-clock" data-type="clock" data-font-color="#000000" data-border-color="#black" data-background-color="black" data-font-size="60" data-location-type="country" data-location-id="188">
+        <a href="https://www.thetimenow.com/bulgaria" rel="nofollow" target="_blank">© The Time Now</a>
+    </div>
+    <script type="text/javascript" src="https://www.thetimenow.com/ttn-embed.min.js"></script>
+
+    <div id="countdown">
+        <table class="countdownContainer">
+            <tr class="info">
+                <td colspan="4" class="info">Days until bday</td>
+            </tr>
+            <td id="days">120</td>
+            <td id="hours">4</td>
+            <td id="minutes">15</td>
+            <td id="seconds">32</td>
+            </tr>
+            <tr>
+            <td>Days</td>
+            <td>Hours</td>
+            <td>Minutes</td>
+            <td>Seconds</td>
+            </tr>
+        </table>
     </div>
 
-    <div id="birthdayTime">
-
-
-    </div>
-
+    <div id="birthdayTime"></div>
 
     <div id="hrt"></div>
 
-    <div>
+    <div id="switchedTime"></div>
 
+    <div>
+        <!-- Change the src attribute to a placeholder for now -->
+        <img id="img1" src="">
+
+        <!-- Add an array of GIF URLs -->
+        <script>
+            const gifs = [
+                "https://media.giphy.com/avatars/40hara/Yoz2OSXiiBS9.gif",
+                "https://media.tenor.com/aZbJeTIckT8AAAAC/catgirl-isekai-mao.gif",
+                "https://media.tenor.com/e4z1BEWHiPMAAAAC/guh.gif",
+                "https://media.tenor.com/EbNeN8Sf8QwAAAAM/umaru-hyper.gif",
+                "https://media.tenor.com/z88st-CKXoUAAAAM/chika-yeah.gif",
+                "https://media.tenor.com/myCsjxxbtXAAAAAM/anime-happy.gif",
+                "https://media.tenor.com/g8rtlSwFcdEAAAAM/slow-loop-koharu-minagi.gif",
+                "https://media.tenor.com/u6yoDKoczXEAAAAM/adachi-anime-happy.gif",
+                "https://media.tenor.com/5AXa89n7PgwAAAAM/honoka-kousaka-arms-up.gif"
+            ];
+
+            // Get a random index to select a random GIF
+            const randomIndex = Math.floor(Math.random() * gifs.length);
+
+            // Set the source of the img tag to the randomly selected GIF
+            document.getElementById('img1').src = gifs[randomIndex];
+        </script>
     </div>
-    <img id="img1" src=https://media.tenor.com/jY84qSwONRwAAAAM/anime-happy.gif>
+
+    <div id="chatBox">
+      <div id="chatContent"></div>
+      <button id="closeChat">Close</button>
+    </div>
+
     <script src="js.js"></script>
     <script>
-      AOS.init();
+        AOS.init();
+
+        // Update the image source on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const gifImage = document.getElementById('img1');
+            const randomIndex = Math.floor(Math.random() * gifs.length);
+            gifImage.src = gifs[randomIndex];
+        });
     </script>
-  </body>
-  </html>
+</body>
+</html>

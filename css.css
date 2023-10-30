@@ -1,28 +1,106 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+html {
+    background-color: black;
+}
+
 * {
     align-items: center !important;
     text-align: center;
-    background-color: black;
     color: white;
     text-align: center;
     font-family: 'Roboto', sans-serif;
 }
 
 a {
-   visibility: hidden;
+    visibility: hidden;
 }
+
 div.embed-clock-copyright {
     background-color: black !important;
 }
+
 table {
     display: inline;
 }
-#hrt {
-    padding-top:20px;
+
+#hrt,
+#switchedTime {
+    padding-top: 20px;
 }
 
 img {
     width: 300px;
     height: 300px;
     border-radius: 30px;
+}
+
+#switchedTime {
+    position: relative;
+    display: inline-block;
+}
+
+/* Add mobile responsiveness */
+@media only screen and (max-width: 600px) {
+    .info-button,
+    .info-box {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    .info-button {
+        top: 2%;
+        right: 2%;
+    }
+
+    .info-box {
+        bottom: 2%;
+        right: 2%;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    /* Surface Pro 7 width */
+    .countdownContainer,
+    #hrt,
+    #switchedTime,#chatContent {
+        font-size: 24px;
+    }
+
+    #chatBox {
+        right: 20px;
+        bottom: 20px;
+    }
+
+    #closeChat {
+        font-size: 14px;
+    }
+
+    #switchedTime i {
+        cursor: pointer;
+    }
+}
+
+#chatBox {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+#closeChat {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
 }
