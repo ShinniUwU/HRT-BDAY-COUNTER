@@ -7,8 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const secondsCountdown = document.querySelector('#seconds');
     const hrtContainer = document.querySelector('#hrt');
     const switchedTimeContainer = document.querySelector('#switchedTime');
+    const gifImage = document.getElementById('img1');
+    const clickSound = document.getElementById('clickSound');
 
     let buttonClicked = false; // Variable to track button click
+    let gifCount = 0; // Variable to track the number of displayed GIFs
 
     const currentTime = new Date();
     let yearOfTheEvent = currentTime.getFullYear();
@@ -94,73 +97,82 @@ document.addEventListener('DOMContentLoaded', function () {
 
     calculateDaysOnHRT();
 
-     // Get the img element
-     const gifImage = document.getElementById('img1');
+    // Function to create additional GIF containers
+    function createGifContainers() {
+        // Check if the maximum number of GIFs has been reached
+        if (gifCount < 5) {
+            // Create left and right gif containers
+            const leftGifContainer = document.createElement('div');
+            const rightGifContainer = document.createElement('div');
 
-     // Get the audio element
-     const clickSound = document.getElementById('clickSound');
- 
-     // Function to create additional GIF containers
-     function createGifContainers() {
-         // Get the container for additional GIFs on the left
-         const leftGifContainer = document.createElement('div');
-         leftGifContainer.classList.add('gif-container', 'left');
- 
-         // Get the container for additional GIFs on the right
-         const rightGifContainer = document.createElement('div');
-         rightGifContainer.classList.add('gif-container', 'right');
- 
-         // Append the containers to the document body
-         document.body.appendChild(leftGifContainer);
-         document.body.appendChild(rightGifContainer);
- 
-         // Function to display up to 5 GIFs with a delay
-         function displayGifsWithDelay(gifContainer, gifs, index, count) {
-             if (index < gifs.length && count < 5) {
-                 // Create a new img element for the current GIF
-                 const newGif = document.createElement('img');
-                 newGif.src = gifs[index];
-                 newGif.classList.add('additional-gif');
- 
-                 // Append the img element to the container
-                 gifContainer.appendChild(newGif);
- 
-                 // Increment the count
-                 count++;
- 
-                 // Display the next GIF after a delay (adjust the delay as needed)
-                 setTimeout(() => {
-                     displayGifsWithDelay(gifContainer, gifs, index + 1, count);
-                 }, 1000); // 1000 milliseconds (1 second) delay
-             }
-         }
- 
-         // Get a random index to select a random GIF
-         const randomIndex = Math.floor(Math.random() * gifs.length);
- 
-         // Display additional GIFs on the left with a delay
-         displayGifsWithDelay(leftGifContainer, gifs, randomIndex, 0);
- 
-         // Display additional GIFs on the right with a delay
-         displayGifsWithDelay(rightGifContainer, gifs, randomIndex, 0);
- 
-         // Set a timeout to apply fade-out effect and then remove the additional GIF containers
-         setTimeout(() => {
-             leftGifContainer.classList.add('fadeOut');
-             rightGifContainer.classList.add('fadeOut');
-             // Remove the additional GIF containers after the fade-out animation completes (1 second delay)
-             setTimeout(() => {
-                 document.body.removeChild(leftGifContainer);
-                 document.body.removeChild(rightGifContainer);
-             }, 1000);
-         }, 10000); // 10000 milliseconds (10 seconds) timeout
-     }
- 
-     // Add a click event listener to the img element
-     gifImage.addEventListener('click', function () {
-         // Play the sound
-         clickSound.play();
-         createGifContainers();
-     });
+            leftGifContainer.classList.add('gif-container', 'left');
+            rightGifContainer.classList.add('gif-container', 'right');
+
+            document.body.appendChild(leftGifContainer);
+            document.body.appendChild(rightGifContainer);
+
+            // Set a timeout to wait for the sound to finish
+            setTimeout(() => {
+                // Get a random index to select a random GIF
+                const randomIndex = Math.floor(Math.random() * gifs.length);
+
+                // Display additional GIFs on the left with a delay
+                displayGifsWithDelay(leftGifContainer, gifs, randomIndex, 0);
+
+                // Display additional GIFs on the right with a delay
+                displayGifsWithDelay(rightGifContainer, gifs, randomIndex, 0);
+
+                // Set a timeout to apply fade-out effect and then remove the additional GIF containers
+                setTimeout(() => {
+                    leftGifContainer.classList.add('fadeOut');
+                    rightGifContainer.classList.add('fadeOut');
+                    // Remove the additional GIF containers after the fade-out animation completes (1 second delay)
+                    setTimeout(() => {
+                        document.body.removeChild(leftGifContainer);
+                        document.body.removeChild(rightGifContainer);
+                        buttonClicked = false; // Reset the buttonClicked flag
+                        gifCount++; // Increment the gifCount
+                    }, 1000);
+                }, 10000); // 10000 milliseconds (10 seconds) timeout
+            }, clickSound.duration * 1000); // Wait for the duration of the sound
+        }
+    }
+
+    // Display up to 5 GIFs with a delay
+    function displayGifsWithDelay(gifContainer, gifs, index, count) {
+        if (index < gifs.length && count < 5) {
+            // Create an additional gif element
+            const additionalGif = document.createElement('img');
+            additionalGif.src = gifs[index];
+            additionalGif.classList.add('additional-gif');
+
+            // Append the additional gif element to the gif container
+            gifContainer.appendChild(additionalGif);
+
+            // Increment the count
+            count++;
+
+            // Display the next GIF after a delay (adjust the delay as needed)
+            setTimeout(() => {
+                displayGifsWithDelay(gifContainer, gifs, index + 1, count);
+            }, 1000); // 1000 milliseconds (1 second) delay
+        }
+    }
+
+    // Add a click event listener to the img element
+    gifImage.addEventListener('click', function () {
+        if (!buttonClicked) { // Check if the button has not been clicked
+            buttonClicked = true; // Set the buttonClicked flag
+            // Play the sound
+            clickSound.currentTime = 0; // Reset the sound to the beginning
+            clickSound.play();
+            createGifContainers();
+        }
+    });
+
+    // Make the honk spammable
+    gifImage.addEventListener('mousedown', function () {
+        clickSound.currentTime = 0; // Reset the sound to the beginning
+        clickSound.play();
+    });
 });
-
