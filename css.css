@@ -1,23 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
-html {
-    background-color: black;
+body {
+    background: linear-gradient(0deg, #FBDCEB, #C0868D);
 }
 
 * {
-    align-items: center !important;
     text-align: center;
     color: white;
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bolder;
+    animation: glow 1.5s ease-in-out infinite alternate; /* Add the glow animation to all text elements */
 }
-
+@keyframes glow {
+    to {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
+    }
+}
 a {
     visibility: hidden;
 }
 
 div.embed-clock-copyright {
-    background-color: black !important;
+    background-color: transparent !important;
 }
 
 table {
@@ -27,59 +31,47 @@ table {
 #hrt,
 #switchedTime {
     padding-top: 20px;
+    font-size: 20px;
 }
 
 img {
     width: 300px;
     height: 300px;
     border-radius: 30px;
+    transition: transform 0.3s ease-in-out;
 }
 
-#switchedTime {
-    position: relative;
-    display: inline-block;
+img:hover {
+    transform: scale(1.1);
 }
 
-/* Add mobile responsiveness */
-@media only screen and (max-width: 600px) {
-    .info-button,
-    .info-box {
-        width: 30px;
-        height: 30px;
-        font-size: 14px;
-    }
-
-    .info-button {
-        top: 2%;
-        right: 2%;
-    }
-
-    .info-box {
-        bottom: 2%;
-        right: 2%;
-    }
+#switchedTime i {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
 }
 
-@media only screen and (max-width: 1024px) {
-    /* Surface Pro 7 width */
-    .countdownContainer,
-    #hrt,
-    #switchedTime,#chatContent {
-        font-size: 24px;
-    }
+#switchedTime i:hover {
+    transform: scale(1.2);
+}
 
-    #chatBox {
-        right: 20px;
-        bottom: 20px;
-    }
+#countdown {
+   
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
 
-    #closeChat {
-        font-size: 14px;
-    }
+#birthdayTime {
+    font-size: 20px;
+  
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
 
-    #switchedTime i {
-        cursor: pointer;
-    }
+.img {
+  
+    margin-top: 20px;
 }
 
 #chatBox {
@@ -103,4 +95,60 @@ img {
     border-radius: 3px;
     cursor: pointer;
     margin-top: 10px;
+}
+
+.ttn-thetimenow-clock {
+    color: white !important;
+}
+
+.ttn-thetimenow-clock-date {
+    font-size: 30px !important;
+}
+
+.info
+{
+    font-size: 22px;
+    
+}
+.gif-container {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
+}
+
+.additional-gif {
+    width: 100px; /* Adjust the width of additional GIFs as needed */
+    height: 100px; /* Adjust the height of additional GIFs as needed */
+    margin: 10px;
+    border-radius: 10px;
+    transform: translateY(-100%);
+    animation: slideIn 1s forwards;
+}
+
+@keyframes slideIn {
+    to {
+        transform: translateY(0);
+    }
+}
+
+
+.fadeOut {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
 }

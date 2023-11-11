@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const hrtContainer = document.querySelector('#hrt');
     const switchedTimeContainer = document.querySelector('#switchedTime');
 
+    let buttonClicked = false; // Variable to track button click
+
     const currentTime = new Date();
     let yearOfTheEvent = currentTime.getFullYear();
     let eventDate = new Date(yearOfTheEvent, 03, 05); // April 5th in Bulgarian time
@@ -42,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         seconds %= 60;
 
         if (isItApril5th) {
-            console.log('Happy birthday, Shinni!');
+            console.log('Happy birthday, Hana!');
 
             countdownContainer.style.display = "none";
             birthdayTime.style.display = "block";
@@ -54,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Additional countdown for the time since switched
             const switchedTime = Math.floor((currentTime - switchedDate) / (1000 * 60 * 60 * 24));
-            const switchedTimeText = `Time passed since switch: ${switchedTime} day${switchedTime === 1 ? '' : 's'}`;
+            const switchedTimeText = `Time on anti-androgen: ${switchedTime} day${switchedTime === 1 ? '' : 's'}`;
             switchedTimeContainer.textContent = switchedTimeText;
 
             // Add the information icon next to the "Time until switch" text
@@ -68,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const chatBox = document.getElementById('chatBox');
                 const chatContent = document.getElementById('chatContent');
 
-                chatContent.innerHTML = `Time since I switched from finasteride to bicalutamide (anti androgens): ${switchedTime} day(s)`;
+                chatContent.innerHTML = `Time since I switched from finasteride to bicalutamide (anti-androgens): ${switchedTime} days`;
 
                 chatBox.style.display = 'block';
 
@@ -87,8 +89,78 @@ document.addEventListener('DOMContentLoaded', function () {
     // Calculate days on HRT
     function calculateDaysOnHRT() {
         const daysOnHRT = Math.floor((currentTime - hrtStartDate) / (1000 * 60 * 60 * 24));
-        hrtContainer.textContent = `On HRT since ${daysOnHRT} day${daysOnHRT === 1 ? '' : 's'}`;
+        hrtContainer.textContent = `On HRT for ${daysOnHRT} day${daysOnHRT === 1 ? '' : 's (no anti-androgen)'}`;
     }
 
     calculateDaysOnHRT();
+
+     // Get the img element
+     const gifImage = document.getElementById('img1');
+
+     // Get the audio element
+     const clickSound = document.getElementById('clickSound');
+ 
+     // Function to create additional GIF containers
+     function createGifContainers() {
+         // Get the container for additional GIFs on the left
+         const leftGifContainer = document.createElement('div');
+         leftGifContainer.classList.add('gif-container', 'left');
+ 
+         // Get the container for additional GIFs on the right
+         const rightGifContainer = document.createElement('div');
+         rightGifContainer.classList.add('gif-container', 'right');
+ 
+         // Append the containers to the document body
+         document.body.appendChild(leftGifContainer);
+         document.body.appendChild(rightGifContainer);
+ 
+         // Function to display up to 5 GIFs with a delay
+         function displayGifsWithDelay(gifContainer, gifs, index, count) {
+             if (index < gifs.length && count < 5) {
+                 // Create a new img element for the current GIF
+                 const newGif = document.createElement('img');
+                 newGif.src = gifs[index];
+                 newGif.classList.add('additional-gif');
+ 
+                 // Append the img element to the container
+                 gifContainer.appendChild(newGif);
+ 
+                 // Increment the count
+                 count++;
+ 
+                 // Display the next GIF after a delay (adjust the delay as needed)
+                 setTimeout(() => {
+                     displayGifsWithDelay(gifContainer, gifs, index + 1, count);
+                 }, 1000); // 1000 milliseconds (1 second) delay
+             }
+         }
+ 
+         // Get a random index to select a random GIF
+         const randomIndex = Math.floor(Math.random() * gifs.length);
+ 
+         // Display additional GIFs on the left with a delay
+         displayGifsWithDelay(leftGifContainer, gifs, randomIndex, 0);
+ 
+         // Display additional GIFs on the right with a delay
+         displayGifsWithDelay(rightGifContainer, gifs, randomIndex, 0);
+ 
+         // Set a timeout to apply fade-out effect and then remove the additional GIF containers
+         setTimeout(() => {
+             leftGifContainer.classList.add('fadeOut');
+             rightGifContainer.classList.add('fadeOut');
+             // Remove the additional GIF containers after the fade-out animation completes (1 second delay)
+             setTimeout(() => {
+                 document.body.removeChild(leftGifContainer);
+                 document.body.removeChild(rightGifContainer);
+             }, 1000);
+         }, 10000); // 10000 milliseconds (10 seconds) timeout
+     }
+ 
+     // Add a click event listener to the img element
+     gifImage.addEventListener('click', function () {
+         // Play the sound
+         clickSound.play();
+         createGifContainers();
+     });
 });
+
