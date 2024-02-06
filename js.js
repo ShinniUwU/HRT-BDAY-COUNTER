@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Additional countdown for the time since switched
             const switchedTime = Math.floor((currentTime - switchedDate) / (1000 * 60 * 60 * 24));
-            const switchedTimeText = `Time on anti-androgen: ${switchedTime} day${switchedTime === 1 ? '' : 's'}`;
+            const switchedTimeText = `Time on anti-androgen + hrt: ${switchedTime} day${switchedTime === 1 ? '' : 's'}`;
             switchedTimeContainer.textContent = switchedTimeText;
 
             // Add the information icon next to the "Time until switch" text
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const chatBox = document.getElementById('chatBox');
                 const chatContent = document.getElementById('chatContent');
 
-                chatContent.innerHTML = `Time since I switched from finasteride to bicalutamide (anti-androgens): ${switchedTime} days`;
+                chatContent.innerHTML = `Time since I switched from finasteride to an actual anti-androgen`;
 
                 chatBox.style.display = 'block';
 
