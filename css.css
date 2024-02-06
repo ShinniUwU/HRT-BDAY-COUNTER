@@ -1,7 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
 body {
-    background: linear-gradient(0deg, #FBDCEB, #C0868D);
+    background: rgb(251,220,235);
+    background: -moz-radial-gradient(circle, rgba(251,220,235,1) 52%, rgba(192,134,141,1) 100%);
+    background: -webkit-radial-gradient(circle, rgba(251,220,235,1) 52%, rgba(192,134,141,1) 100%);
+    background: radial-gradient(circle, rgba(251,220,235,1) 52%, rgba(192,134,141,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fbdceb",endColorstr="#c0868d",GradientType=1);
 }
 
 * {
