@@ -131,4 +131,16 @@ img:hover {
     height: 80px;
     margin: 5px;
     border-radius: 10px;
-}
+    animation: slideDown 0.5s ease-in-out forwards; /* Apply slideDown animation */
+  }
+
+
+/* Add animation for sliding down */
+@keyframes slideDown {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }

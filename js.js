@@ -130,28 +130,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Display up to 5 GIFs with a delay
-    function displayGifsWithDelay(gifContainer, gifs, index, count) {
-        if (index < gifs.length && count < 5) {
-            // Create an additional gif element
-            const additionalGif = document.createElement('img');
-            additionalGif.src = gifs[index];
-            additionalGif.classList.add('additional-gif');
+    // Function to display GIFs with a delay and sliding effect
+function displayGifsWithDelay(gifContainer, gifs, index, count) {
+    if (index < gifs.length && count < 5) {
+        // Create an additional gif element
+        const additionalGif = document.createElement('img');
+        additionalGif.src = gifs[index];
+        additionalGif.classList.add('additional-gif');
 
-            // Append the additional gif element to the gif container
-            gifContainer.appendChild(additionalGif);
+        // Append the additional gif element to the gif container
+        gifContainer.appendChild(additionalGif);
 
-            // Increment the count
-            count++;
+        // Increment the count
+        count++;
 
-            // Display the next GIF after a delay (adjust the delay as needed)
-            setTimeout(() => {
-                displayGifsWithDelay(gifContainer, gifs, index + 1, count);
-            }, 1000); // 1000 milliseconds (1 second) delay
-        }
+        // Display the next GIF after a delay (adjust the delay as needed)
+        setTimeout(() => {
+            displayGifsWithDelay(gifContainer, gifs, index + 1, count);
+        }, 500); // 500 milliseconds (0.5 second) delay
     }
+}
+let lastClickTime = 0; // Variable to store the timestamp of the last click
+const clickCooldown = 1000; // Cooldown period in milliseconds
 
-    // Add a click event listener to the img element
-    gifImage.addEventListener('click', function () {
+
+gifImage.addEventListener('click', function () {
+    const currentTime = new Date().getTime();
+    if (currentTime - lastClickTime < clickCooldown) {
+        // If clicked within the cooldown period, initiate the GIF creation
         if (!buttonClicked) { // Check if the button has not been clicked
             buttonClicked = true; // Set the buttonClicked flag
             // Play the sound
@@ -159,13 +165,17 @@ document.addEventListener('DOMContentLoaded', function () {
             clickSound.play();
             createGifContainers();
         }
-    });
+    }
+    lastClickTime = currentTime; // Update the last click time
+});
 
-    // Make the honk spammable
-    gifImage.addEventListener('mousedown', function () {
-        clickSound.currentTime = 0; // Reset the sound to the beginning
-        clickSound.play();
-    });
+
+
+   // Make the honk spammable
+gifImage.addEventListener('mousedown', function () {
+    clickSound.currentTime = 0; // Reset the sound to the beginning
+    clickSound.play();
+});
 
     // Function to toggle display format between months + days and days only
     function toggleDisplayFormat(container, startDate) {
