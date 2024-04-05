@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRT & BDAY COUNTER</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/MVByQfj/27133-removebg-preview.png">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+<body data-aos="fade-up" data-aos-duration="500">
+<header>
+    <h1>The current time and day for me right now:</h1>
+    <div class="thetimenow-embeddable-clock" data-type="clock" data-font-color="#000000" data-border-color="transperent" data-background-color="transperent" data-font-size="60" data-location-type="country" data-location-id="188">
+        <a href="https://www.thetimenow.com/bulgaria" rel="nofollow" target="_blank">© The Time Now</a>
+    </div>
+    <script type="text/javascript" src="https://www.thetimenow.com/ttn-embed.min.js"></script>
+ 
+</header>
+  <main> 
+
+
+    </div>
+    <div id="countdown">
+        <table class="countdownContainer">
+            <tr class="info">
+                <td colspan="4" class="info">Days until my birthday:</td>
+            </tr>
+            <td id="days">120</td>
+            <td id="hours">4</td>
+            <td id="minutes">15</td>
+            <td id="seconds">32</td>
+            </tr>
+            <tr>
+            <td>Days</td>
+            <td>Hours</td>
+            <td>Minutes</td>
+            <td>Seconds</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="birthdayTime"></div>
+
+    <div id="datingTime" class="info"></div>
+
+    <div id="hrt" class="info"></div>
+    <img id="img1" src="">
+</main>
+    <!-- Add an array of GIF URLs -->
+    <script>
+        const gifs = [
+            "https://media.giphy.com/avatars/40hara/Yoz2OSXiiBS9.gif",
+            "https://media.tenor.com/aZbJeTIckT8AAAAC/catgirl-isekai-mao.gif",
+            "https://media.tenor.com/e4z1BEWHiPMAAAAC/guh.gif",
+            "https://media.tenor.com/EbNeN8Sf8QwAAAAM/umaru-hyper.gif",
+            "https://media.tenor.com/z88st-CKXoUAAAAM/chika-yeah.gif",
+            "https://media.tenor.com/myCsjxxbtXAAAAAM/anime-happy.gif",
+            "https://media.tenor.com/g8rtlSwFcdEAAAAM/slow-loop-koharu-minagi.gif",
+            "https://media.tenor.com/u6yoDKoczXEAAAAM/adachi-anime-happy.gif",
+            "https://media.tenor.com/5AXa89n7PgwAAAAM/honoka-kousaka-arms-up.gif"
+        ];
+
+        // Get a random index to select a random GIF
+        const randomIndex = Math.floor(Math.random() * gifs.length);
+
+        // Set the source of the img tag to the randomly selected GIF
+        document.getElementById('img1').src = gifs[randomIndex];
+    </script>
+    <audio id="clickSound" src="honk.mp3"></audio>
+    <script src="js.js"></script>
+    <script>
+        AOS.init();
+
+        // Update the image source on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const gifImage = document.getElementById('img1');
+            const randomIndex = Math.floor(Math.random() * gifs.length);
+            gifImage.src = gifs[randomIndex];
+        });
+    </script>
+</body>
+</html>
