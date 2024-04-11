@@ -23,6 +23,52 @@ document.addEventListener('DOMContentLoaded', function () {
     let buttonClicked = false; // Variable to track button click
     let gifCount = 0; // Variable to track the number of displayed GIFs
 
+
+
+    let currentTimestamp = luxon.DateTime.local().setZone("Europe/Sofia").toMillis();
+
+    function updateTime() {
+        // Get the current time in Bulgaria
+        const bulgariaTime = luxon.DateTime.now().setZone("Europe/Sofia");
+    
+        // Format the time in AM/PM format
+        const formattedTime = bulgariaTime.toLocaleString({
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+    
+        // Get the existing time element or create a new one if it doesn't exist
+        let timeElement = document.getElementById('formattedTime');
+        if (!timeElement) {
+            timeElement = document.createElement('div');
+            timeElement.id = 'formattedTime';
+            timeElement.style.marginTop = '20px'; // Add spacing below h1
+            timeElement.style.fontSize = '54px'; // Set the font size
+            // Get the header element
+            const header = document.querySelector('header');
+            // Insert the formatted time element after the h1 within the header
+            header.insertBefore(timeElement, header.children[1]); // Insert after the h1
+        }
+    
+        // Set the text content of the time element to the formatted time
+        timeElement.textContent = `${formattedTime}`;
+    
+        // Schedule the next update
+        scheduleNextUpdate();
+    }
+    
+    function scheduleNextUpdate() {
+        const newTimestamp = luxon.DateTime.local().setZone("Europe/Sofia").toMillis();
+        const timeDifference = newTimestamp - currentTimestamp;
+        currentTimestamp = newTimestamp;
+        setTimeout(updateTime, timeDifference);
+    }
+    
+    // Call updateTime initially to set the time
+    updateTime();
+    
+    
     function countdown() {
         const now = new Date();
     

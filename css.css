@@ -1,60 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
-
 body {
-    background-color: #fbdceb;
+    background-color: #f8c5d0;
     color: #333;
-    font-family: 'Raleway', sans-serif;
-    font-size: 16px; /* Increase font size for better readability */
+    font-size: 16px;
+    line-height: 1.6;
 }
+
 h1 {
     margin-top: 20px;
-    font-size: 24px; /* Increase font size for headings */
+    font-size: 24px;
 }
 
 * {
     text-align: center;
-    color: white;
-    font-family: 'Raleway', sans-serif;
+    color: #333;
+    font-family: 'Proxima Nova', Georgia, sans-serif;
     font-weight: bolder;
-    animation: glow 1.5s ease-in-out infinite alternate; /* Add the glow animation to all text elements */
-}
-@keyframes glow {
-    to {
-        text-shadow: none;
-    }
-}
-
-a {
-    visibility: hidden;
-}
-
-div.embed-clock-copyright {
-    background-color: transparent !important;
 }
 
 table {
     display: inline;
+    font-size: 18px; /* Increased font size for better visibility */
 }
 
 #hrt {
     font-size: 18px;
-    margin-top: 20px; /* Add more spacing between sections */
+    margin-top: 20px;
 }
-
 
 #img1 {
     width: 200px;
     height: 200px;
     border-radius: 20px;
-    margin-top: 20px; /* Add more spacing between sections */
+    margin-top: 20px;
 }
+
 img {
-    width: 100%; /* Ensure images are responsive */
+    width: 100%;
     height: auto;
     border-radius: 10px;
     transition: transform 0.3s ease-in-out;
 }
-
 
 img:hover {
     transform: scale(1.1);
@@ -75,37 +60,21 @@ img:hover {
     margin-top: 20px;
 }
 
-#birthdayTime {
+#birthdayTime, #datingTime {
     font-size: 18px;
     margin-top: 10px;
 }
-#datingTime {
-    font-size: 18px;
-    margin-top: 20px; /* Add more spacing between sections */
-}
-
 
 .img {
     margin-top: 20px;
 }
 
-.ttn-thetimenow-clock {
-    color: white !important;
-}
-
-.ttn-thetimenow-clock-date {
-    font-size: 24px !important;
-}
-
-.info {
-    font-size: 16px; /* Maintain consistent font size for information */
-    margin-top: 10px;
-}
 .countdownContainer {
-    margin: 0 auto; /* Center the countdown table */
+    margin: 0 auto;
 }
+
 .countdownContainer td {
-    padding: 5px 10px; /* Add padding to table cells */
+    padding: 5px 10px;
 }
 
 .gif-container {
@@ -130,16 +99,24 @@ img:hover {
     height: 80px;
     margin: 5px;
     border-radius: 10px;
-    animation: slideDown 0.5s ease-in-out forwards; /* Apply slideDown animation */
-  }
+    animation: slideDown 0.5s ease-in-out forwards;
+}
 
-
-/* Add animation for sliding down */
 @keyframes slideDown {
     0% {
-      transform: translateY(-100%);
+        transform: translateY(-100%);
     }
     100% {
-      transform: translateY(0);
+        transform: translateY(0);
     }
-  }
+}
+img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+img:hover {
+    transform: scale(1.1);
+}
