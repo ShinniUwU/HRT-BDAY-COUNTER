@@ -1,34 +1,42 @@
-# Personal Site README
+# Personal Site Tracker
 
-Welcome to my personal website! This is a simple webpage I created for myself to keep track of a few important milestones and events in my life. Here's what you'll find on this site:
+Welcome to my personal site tracker! Here, you'll find some nifty tools to keep track of important dates and events in my life. You can access the tracker [here](https://shinniuwu.github.io/HRT-BDAY-COUNTER/). Let's dive in and see what's under the hood.
 
-## Features:
+## Features
 
-### 1. Relationship Anniversary Counter:
-- Displays the number of days I've been dating my cutie.
+### Countdown Timer
+This handy timer shows you exactly how long it is until my birthday. Simple and straightforward.
 
-### 2. Hormone Replacement Therapy (HRT) Counter:
-- Shows the number of days I've been on hormone replacement therapy.
+### HRT Tracker
+For those curious, I've included a tracker to log the days I've been on Hormone Replacement Therapy (HRT). It's a personal journey, and I like to keep tabs on my progress.
 
-### 3. Current Time:
-- Utilizes the time service provided by [TheTimeNow](https://www.thetimenow.com) to display the current time for me.
+### Dating Anniversary Tracker
+Want to know how long it's been since I started dating my significant other? Look no further. It's a sweet little reminder of the time we've spent together.
 
-### 4. Countdown to My Birthday:
-- Indicates the number of days left until my birthday.
+### Random GIFs
+For a touch of fun, I've added a feature that displays random GIFs. Click on the GIF to reveal a surprise animation!
 
-### 5. Easter Egg:
-- There's a surprise waiting to be discovered! :3
+## How It Works
 
-## Accessing the Site:
-You can access my personal site at [https://shinniuwu.github.io/HRT-BDAY-COUNTER/](https://shinniuwu.github.io/HRT-BDAY-COUNTER/).
+### Countdown Logic
+The countdown timer ticks away, updating every second until my birthday arrives. Once the big day is here, a special message pops up to mark the occasion.
 
-## Important Note:
-This website is intended for personal use and was created by me for my own purposes. While you're welcome to visit, please note that it's tailored specifically to my needs and preferences. If you wish to use any part of it, you can fork my files, but kindly remember to give credits. <3
+### HRT & Dating Anniversary Calculation
+These trackers simply count the number of days since specific dates. It's a straightforward way to keep track of milestones.
 
-## Acknowledgments:
-A massive thanks to [TheTimeNow](https://www.thetimenow.com) for providing the time service used on this site.
+### Random GIFs
+Clicking on the GIF triggers a playful animation where more GIFs slide onto the screen. It's just a bit of whimsy to liven up the page!
 
-## Feedback and Suggestions:
-If you have any feedback or suggestions for improving my site, feel free to reach out to me directly.
+## Technologies Used
+- HTML
+- CSS
+- JavaScript
+- Luxon.js for date and time manipulation
+- AOS.js for scroll animations
 
-Thank you for visiting!
+## Credits
+- GIFs sourced from various online platforms
+- Luxon.js for date and time manipulation
+- AOS.js for scroll animations
+
+There you have it! Thanks for stopping by and checking out my personal site tracker. If you have any questions or suggestions, feel free to reach out.
