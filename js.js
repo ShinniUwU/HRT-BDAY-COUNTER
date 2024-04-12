@@ -24,49 +24,73 @@ document.addEventListener('DOMContentLoaded', function () {
     let gifCount = 0; // Variable to track the number of displayed GIFs
 
 
+// Define global variable currentTimestamp
+let currentTimestamp;
 
-    let currentTimestamp = luxon.DateTime.local().setZone("Europe/Sofia").toMillis();
+function updateTime() {
+    // Get the current time in Bulgaria
+    const bulgariaTime = luxon.DateTime.now().setZone("Europe/Sofia");
 
-    function updateTime() {
-        // Get the current time in Bulgaria
-        const bulgariaTime = luxon.DateTime.now().setZone("Europe/Sofia");
-    
-        // Format the time in AM/PM format
-        const formattedTime = bulgariaTime.toLocaleString({
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true
-        });
-    
-        // Get the existing time element or create a new one if it doesn't exist
-        let timeElement = document.getElementById('formattedTime');
-        if (!timeElement) {
-            timeElement = document.createElement('div');
-            timeElement.id = 'formattedTime';
-            timeElement.style.marginTop = '20px'; // Add spacing below h1
-            timeElement.style.fontSize = '54px'; // Set the font size
-            // Get the header element
-            const header = document.querySelector('header');
-            // Insert the formatted time element after the h1 within the header
-            header.insertBefore(timeElement, header.children[1]); // Insert after the h1
-        }
-    
-        // Set the text content of the time element to the formatted time
-        timeElement.textContent = `${formattedTime}`;
-    
-        // Schedule the next update
-        scheduleNextUpdate();
+    // Format the time in AM/PM format
+    const formattedTime = bulgariaTime.toLocaleString({
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
+
+    // Get the existing time element or create a new one if it doesn't exist
+    let timeElement = document.getElementById('formattedTime');
+    if (!timeElement) {
+        timeElement = document.createElement('div');
+        timeElement.id = 'formattedTime';
+        timeElement.style.marginTop = '20px'; // Add spacing below h1
+        timeElement.style.fontSize = '54px'; // Set the font size
+        // Get the header element
+        const header = document.querySelector('header');
+        // Insert the formatted time element after the h1 within the header
+        header.insertBefore(timeElement, header.children[1]); // Insert after the h1
     }
-    
-    function scheduleNextUpdate() {
-        const newTimestamp = luxon.DateTime.local().setZone("Europe/Sofia").toMillis();
-        const timeDifference = newTimestamp - currentTimestamp;
-        currentTimestamp = newTimestamp;
-        setTimeout(updateTime, timeDifference);
+
+    // Set the text content of the time element to the formatted time
+    timeElement.textContent = `${formattedTime}`;
+
+    // Format the date
+    const formattedDate = bulgariaTime.toLocaleString({
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    // Get the existing date element or create a new one if it doesn't exist
+    let dateElement = document.getElementById('formattedDate');
+    if (!dateElement) {
+        dateElement = document.createElement('div');
+        dateElement.id = 'formattedDate';
+        dateElement.style.marginTop = '10px'; // Add spacing below time
+        dateElement.style.fontSize = '24px'; // Set the font size
+        // Get the time element
+        const time = document.getElementById('formattedTime');
+        // Insert the formatted date element after the time element within the header
+        time.parentNode.insertBefore(dateElement, time.nextSibling); // Insert after the time
     }
-    
-    // Call updateTime initially to set the time
-    updateTime();
+
+    // Set the text content of the date element to the formatted date
+    dateElement.textContent = `${formattedDate}`;
+
+    // Schedule the next update
+    scheduleNextUpdate();
+}
+
+function scheduleNextUpdate() {
+    const newTimestamp = luxon.DateTime.local().setZone("Europe/Sofia").toMillis();
+    const timeDifference = newTimestamp - currentTimestamp;
+    currentTimestamp = newTimestamp;
+    setTimeout(updateTime, timeDifference);
+}
+
+// Call updateTime initially to set the time
+updateTime();
+
     
     
     function countdown() {
@@ -223,26 +247,39 @@ gifImage.addEventListener('mousedown', function () {
     clickSound.play();
 });
 
-    // Function to toggle display format between months + days and days only
-    function toggleDisplayFormat(container, startDate) {
-        const currentTime = new Date();
-        const timeDiff = currentTime - startDate;
-        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        container.textContent = `On ${container.id === 'hrt' ? 'HRT' : 'anti-androgen'} for ${days} day${days === 1 ? '' : 's'}`;
-    }
-
     // Add click event listener to toggle display format for time on HRT
-    hrtContainer.addEventListener('click', function () {
-        toggleDisplayFormat(hrtContainer, hrtStartDate);
-    });
+hrtContainer.addEventListener('click', function () {
+    // Check the current displayed format
+    if (hrtContainer.textContent.includes('month')) {
+        // If currently displayed in months, switch to days
+        toggleDisplayFormat(hrtContainer, hrtStartDate, 'days');
+    } else {
+        // If currently displayed in days, switch to months
+        toggleDisplayFormat(hrtContainer, hrtStartDate, 'months');
+    }
+});
 
-    // Add click event listener to toggle display format for days on HRT
-    daysCountdown.addEventListener('click', function () {
-        if (hrtContainer.textContent.includes('month')) {
-            toggleDisplayFormat(hrtContainer, hrtStartDate);
+// Function to toggle display format between months + days and days only
+function toggleDisplayFormat(container, startDate, format) {
+    const currentTime = new Date();
+    const timeDiff = currentTime - startDate;
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    
+    // Depending on the format parameter, display either months + days or days only
+    if (format === 'months') {
+        let months = Math.floor(days / 30); // Assuming each month has 30 days
+        const remainingDays = days % 30;
+        
+        if (months > 0) {
+            container.textContent = `On HRT for ${months} month${months === 1 ? '' : 's'}, ${remainingDays} day${remainingDays === 1 ? '' : 's'}`;
         } else {
-            calculateDaysOnHRT();
+            container.textContent = `On HRT for ${days} day${days === 1 ? '' : 's'}`;
         }
-    });
+    } else {
+        container.textContent = `On HRT for ${days} day${days === 1 ? '' : 's'}`;
+    }
+}
+
+
 
 });
