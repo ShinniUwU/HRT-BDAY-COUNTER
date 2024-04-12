@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'AvenirNextCyr-Regular';
+    src: url('/AvenirNextCyr-Regular.woff') format('woff');
+}
+
 body {
     background-color: #f8c5d0;
     color: #333;
@@ -13,7 +18,7 @@ h1 {
 * {
     text-align: center;
     color: #333;
-    font-family: 'Proxima Nova', Georgia, sans-serif;
+    font-family: 'AvenirNextCyr-Regular', sans-serif;
     font-weight: bolder;
 }
 
