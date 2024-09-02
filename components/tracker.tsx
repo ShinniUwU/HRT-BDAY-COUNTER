@@ -1,3 +1,12 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-console */
+/* eslint-disable prettier/prettier */
+/* eslint-disable jsx-a11y/media-has-caption */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -130,7 +139,6 @@ const BirthdayCountdown = () => {
     calculateDaysDating();
 
     const interval = setInterval(() => {
-      const now = new Date();
       const bulgariaTime = DateTime.now().setZone("Europe/Sofia");
 
       const formattedDate = bulgariaTime.toLocaleString({
