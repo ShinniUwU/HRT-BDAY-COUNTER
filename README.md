@@ -1,42 +1,64 @@
-# Personal Site Tracker
+# Hana's Personal Tracker
 
-Welcome to my personal site tracker! Here, you'll find some nifty tools to keep track of important dates and events in my life. You can access the tracker [here](https://shinniuwu.github.io/HRT-BDAY-COUNTER/). Let's dive in and see what's under the hood.
+Welcome to Hana's Personal Tracker! This React-based web application provides a fun and interactive way to keep track of important dates, milestones, and events in Hana's life.
 
 ## Features
 
-### Countdown Timer
-This handy timer shows you exactly how long it is until my birthday. Simple and straightforward.
+### Bulgaria Time Display
+- Shows the current time and date in Bulgaria.
 
-### HRT Tracker
-For those curious, I've included a tracker to log the days I've been on Hormone Replacement Therapy (HRT). It's a personal journey, and I like to keep tabs on my progress.
+### Birthday Countdown
+- Displays a countdown to Hana's next birthday, showing days, hours, minutes, and seconds.
+
+### HRT Progress Tracker
+- Tracks and displays the duration Hana has been on Hormone Replacement Therapy (HRT).
 
 ### Dating Anniversary Tracker
-Want to know how long it's been since I started dating my significant other? Look no further. It's a sweet little reminder of the time we've spent together.
+- Keeps track of the number of days since Hana started dating.
 
-### Random GIFs
-For a touch of fun, I've added a feature that displays random GIFs. Click on the GIF to reveal a surprise animation!
+### Interactive GIF Display
+- Features a clickable GIF that changes on each click.
+- After 5 clicks, it briefly displays a grid of all available GIFs.
+
+### Sound Effect
+- Plays a "honk" sound when the GIF is clicked.
+
+## Technologies Used
+
+- React
+- Next.js
+- TypeScript
+- Luxon (for date and time manipulation)
+- Framer Motion (for animations)
+- Tailwind CSS (for styling)
 
 ## How It Works
 
-### Countdown Logic
-The countdown timer ticks away, updating every second until my birthday arrives. Once the big day is here, a special message pops up to mark the occasion.
+1. The app initializes with the current time and calculates various durations.
+2. It updates the countdown, HRT progress, and dating anniversary information every second.
+3. The GIF display allows for user interaction, changing the displayed GIF on each click.
+4. After 5 clicks, it shows a brief animation displaying all available GIFs.
 
-### HRT & Dating Anniversary Calculation
-These trackers simply count the number of days since specific dates. It's a straightforward way to keep track of milestones.
+## Setup and Running
 
-### Random GIFs
-Clicking on the GIF triggers a playful animation where more GIFs slide onto the screen. It's just a bit of whimsy to liven up the page!
+1. Clone the repository
+2. Install dependencies: `yarn install`
+3. Run the development server: `yarn run dev`
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Technologies Used
-- HTML
-- CSS
-- JavaScript
-- Luxon.js for date and time manipulation
-- AOS.js for scroll animations
+## Customization
 
-## Credits
-- GIFs sourced from various online platforms
-- Luxon.js for date and time manipulation
-- AOS.js for scroll animations
+You can easily customize this tracker by modifying the following in the `BirthdayCountdown` component:
 
-There you have it! Thanks for stopping by and checking out my personal site tracker. If you have any questions or suggestions, feel free to reach out.
+- `eventDate`: Set your birthday
+- `hrtStartDate`: Set the date you started HRT
+- `datingStartDate`: Set the date you started dating
+- `presetGifs`: Add or modify the list of GIFs
+
+## Contributing
+
+Feel free to fork this project and make your own versions or improvements. Pull requests are welcome!
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
