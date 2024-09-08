@@ -74,9 +74,8 @@ const BirthdayCountdown = () => {
         setShowAllGifs(true);
         setTimeout(() => {
           setShowAllGifs(false);
-
           return 0; // Reset click count
-        }, 1000); // Increased duration to 1 second
+        }, 2000); // Increased duration to 2 seconds for better visibility on mobile
 
         return 0;
       }
@@ -91,14 +90,13 @@ const BirthdayCountdown = () => {
 
     const countdown = () => {
       const now = new Date();
+      let targetDate = new Date(now.getFullYear(), 3, 5); // April 5th of current year
 
-      if (now > eventDate) {
-        eventDate.setFullYear(eventDate.getFullYear() + 1);
-      } else if (now.getFullYear() === eventDate.getFullYear() + 1) {
-        eventDate.setFullYear(now.getFullYear());
+      if (now > targetDate) {
+        targetDate.setFullYear(targetDate.getFullYear() + 1);
       }
 
-      const remainingTime = eventDate.getTime() - now.getTime();
+      const remainingTime = targetDate.getTime() - now.getTime();
 
       setSeconds(Math.floor((remainingTime / 1000) % 60));
       setMinutes(Math.floor((remainingTime / 1000 / 60) % 60));
@@ -170,7 +168,7 @@ const BirthdayCountdown = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-purple-900 to-indigo-900 text-white min-h-screen flex flex-col justify-center items-center px-6 lg:px-8">
+    <div className="bg-gradient-to-br from-purple-900 to-indigo-900 text-white min-h-screen flex flex-col justify-center items-center px-4 lg:px-8">
       <div className="relative isolate px-6 pt-14 lg:px-8 max-w-screen-md mx-auto w-full">
         <div
           aria-hidden="true"
@@ -200,12 +198,10 @@ const BirthdayCountdown = () => {
             <p className="text-3xl font-semibold">{bulgariaTime}</p>
             <p className="text-lg text-pink-200">{bulgariaDate}</p>
           </div>
-          <h2 className="text-2xl font-bold mb-4 text-center text-pink-200">
+          <h2 className="text-lg sm:text-xl font-bold mb-2 sm:mb-4 text-center text-pink-200">
             Countdown to Hana's Birthday
           </h2>
-          <div
-            className={`${styles.countdown} grid grid-cols-2 md:grid-cols-4 gap-6 mb-8`}
-          >
+          <div className={`${styles.countdown} grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6`}>
             {[
               { value: days, label: "Days" },
               { value: hours, label: "Hours" },
@@ -214,13 +210,13 @@ const BirthdayCountdown = () => {
             ].map(({ value, label }) => (
               <div
                 key={label}
-                className={`${styles.countdownItem} bg-pink-500/20 rounded-lg p-4`}
+                className={`${styles.countdownItem} bg-pink-500/20 rounded-lg p-1 sm:p-2 md:p-4`}
               >
-                <span className={`${styles.countdownValue} text-4xl font-bold`}>
+                <span className={`${styles.countdownValue} text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold`}>
                   {value}
                 </span>
                 <span
-                  className={`${styles.countdownLabel} text-sm uppercase text-pink-200`}
+                  className={`${styles.countdownLabel} text-[10px] sm:text-xs md:text-sm uppercase text-pink-200`}
                 >
                   {label}
                 </span>
@@ -245,33 +241,35 @@ const BirthdayCountdown = () => {
               <p className="text-2xl font-semibold">{datingInfo}</p>
             </div>
           </div>
-          <div
-            className={`${styles.gifContainer} rounded-xl overflow-hidden shadow-lg cursor-pointer w-[200px] h-[200px] mx-auto`}
-            onClick={handleGifClick}
-          >
-            <Image
-              alt=""
-              className="w-full h-full object-cover"
-              height={200}
-              src={presetGifs[currentGifIndex]}
-              width={200}
-            />
+          <div className="mt-8 sm:mt-12">
+            <div
+              className={`${styles.gifContainer} rounded-xl overflow-hidden shadow-lg cursor-pointer w-[200px] h-[200px] mx-auto`}
+              onClick={handleGifClick}
+            >
+              <Image
+                alt=""
+                className="w-full h-full object-cover"
+                height={200}
+                src={presetGifs[currentGifIndex]}
+                width={200}
+              />
+            </div>
           </div>
           <AnimatePresence>
             {showAllGifs && (
               <motion.div
                 animate={{ opacity: 1 }}
-                className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+                className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4"
                 exit={{ opacity: 0 }}
                 initial={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="grid grid-cols-3 gap-4 p-6 rounded-lg bg-gradient-to-br from-purple-900 to-indigo-900 shadow-2xl">
+                <div className="grid grid-cols-3 gap-2 p-4 rounded-lg bg-gradient-to-br from-purple-900 to-indigo-900 shadow-2xl max-w-xs w-full">
                   {fullPresetGifs.map((gif, index) => (
                     <motion.div
                       key={`${gif}-${index}`}
                       animate={{ scale: 1 }}
-                      className="w-24 h-24 rounded-md overflow-hidden"
+                      className="w-full h-24 rounded-md overflow-hidden"
                       initial={{ scale: 0 }}
                       transition={{ delay: index * 0.05 }}
                     >
