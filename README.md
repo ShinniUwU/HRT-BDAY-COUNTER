@@ -7,22 +7,28 @@ You can visit the site [here](https://hrt-bday-counter-a5devo3l5-shinniuwus-proj
 ## Features
 
 ### Bulgaria Time Display
+
 - Shows the current time and date in Bulgaria.
 
 ### Birthday Countdown
+
 - Displays a countdown to Hana's next birthday, showing days, hours, minutes, and seconds.
 
 ### HRT Progress Tracker
+
 - Tracks and displays the duration Hana has been on Hormone Replacement Therapy (HRT).
 
 ### Dating Anniversary Tracker
+
 - Keeps track of the number of days since Hana started dating.
 
 ### Interactive GIF Display
+
 - Features a clickable GIF that changes on each click.
 - After 5 clicks, it briefly displays a grid of all available GIFs.
 
 ### Sound Effect
+
 - Plays a "honk" sound when the GIF is clicked.
 
 ## Technologies Used

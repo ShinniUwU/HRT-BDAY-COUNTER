@@ -1,11 +1,11 @@
-import "@/styles/globals.css";
-import { Metadata } from "next";
-import clsx from "clsx";
+import '@/styles/globals.css';
+import { Metadata } from 'next';
+import clsx from 'clsx';
 
-import { Providers } from "./providers";
+import { siteConfig } from '@/config/site';
+import { fontSans } from '@/config/fonts';
 
-import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/favicon.png",
+    icon: '/favicon.png',
   },
 };
 
@@ -28,11 +28,11 @@ export default function RootLayout({
       <head />
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
+          'min-h-screen bg-background font-sans antialiased',
           fontSans.variable,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+        <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div>
             <main>{children}</main>
           </div>
