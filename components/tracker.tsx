@@ -75,13 +75,10 @@ const BirthdayCountdown = () => {
         setShowAllGifs(true);
         setTimeout(() => {
           setShowAllGifs(false);
-
           return 0; // Reset click count
-        }, 2000); // Increased duration to 2 seconds for better visibility on mobile
-
+        }, 2000); // Show all GIFs for 2s
         return 0;
       }
-
       return newCount;
     });
   };
@@ -93,11 +90,9 @@ const BirthdayCountdown = () => {
     const countdown = () => {
       const now = new Date();
       let targetDate = new Date(now.getFullYear(), 3, 5); // April 5th of current year
-
       if (now > targetDate) {
         targetDate.setFullYear(targetDate.getFullYear() + 1);
       }
-
       const remainingTime = targetDate.getTime() - now.getTime();
 
       setSeconds(Math.floor((remainingTime / 1000) % 60));
@@ -109,15 +104,14 @@ const BirthdayCountdown = () => {
     const calculateDaysOnHRT = () => {
       const currentTime = new Date();
       const daysOnHRT = Math.floor(
-        (currentTime.getTime() - hrtStartDate.getTime()) /
-          (1000 * 60 * 60 * 24),
+        (currentTime.getTime() - hrtStartDate.getTime()) / (1000 * 60 * 60 * 24)
       );
       let monthsOnHRT = Math.floor(daysOnHRT / 30);
       const remainingDays = daysOnHRT % 30;
 
       if (monthsOnHRT > 0) {
         setHrtInfo(
-          `On HRT for ${monthsOnHRT} month${monthsOnHRT === 1 ? '' : 's'}, ${remainingDays} day${remainingDays === 1 ? '' : 's'}`,
+          `On HRT for ${monthsOnHRT} month${monthsOnHRT === 1 ? '' : 's'}, ${remainingDays} day${remainingDays === 1 ? '' : 's'}`
         );
       } else {
         setHrtInfo(`On HRT for ${daysOnHRT} day${daysOnHRT === 1 ? '' : 's'}`);
@@ -128,7 +122,7 @@ const BirthdayCountdown = () => {
       const currentTime = new Date();
       const daysDating = Math.floor(
         (currentTime.getTime() - datingStartDate.getTime()) /
-          (1000 * 60 * 60 * 24),
+          (1000 * 60 * 60 * 24)
       );
 
       setDatingInfo(`Days since dating: ${daysDating}`);
@@ -137,7 +131,6 @@ const BirthdayCountdown = () => {
     const detectDevice = () => {
       const isPhoneDevice =
         window.innerWidth <= 768 && window.innerHeight <= 1024;
-
       setIsPhone(isPhoneDevice);
     };
 
@@ -146,23 +139,10 @@ const BirthdayCountdown = () => {
     calculateDaysDating();
     detectDevice();
 
-    const interval = setInterval(() => {
-      const bulgariaTime = DateTime.now().setZone('Europe/Sofia');
-
-      const formattedDate = bulgariaTime.toLocaleString({
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-
-      setDate(formattedDate);
-    }, 1000);
-
     const countdownInterval = setInterval(countdown, 1000);
 
     const updateBulgariaTime = () => {
       const bulgariaDateTime = DateTime.now().setZone('Europe/Sofia');
-
       setBulgariaTime(bulgariaDateTime.toFormat('h:mm a'));
       setBulgariaDate(bulgariaDateTime.toFormat('MMMM d, yyyy'));
     };
@@ -173,7 +153,6 @@ const BirthdayCountdown = () => {
     window.addEventListener('resize', detectDevice);
 
     return () => {
-      clearInterval(interval);
       clearInterval(countdownInterval);
       clearInterval(timeInterval);
       window.removeEventListener('resize', detectDevice);
@@ -189,10 +168,14 @@ const BirthdayCountdown = () => {
             className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
           >
             <div
-              className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+              className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] 
+                -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] 
+                opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
               style={{
                 clipPath:
-                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, ' +
+                  '72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, ' +
+                  '27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
               }}
             />
           </div>
@@ -205,6 +188,7 @@ const BirthdayCountdown = () => {
             >
               Hana's Trackers
             </h1>
+
             <div
               className={`${styles.bulgariaTime} bg-pink-500/20 rounded-lg p-4 mb-6`}
             >
@@ -212,9 +196,11 @@ const BirthdayCountdown = () => {
               <p className="text-3xl font-semibold">{bulgariaTime}</p>
               <p className="text-lg text-pink-200">{bulgariaDate}</p>
             </div>
+
             <h2 className="text-lg sm:text-xl font-bold mb-2 sm:mb-4 text-center text-pink-200">
               Countdown to Hana's Birthday
             </h2>
+
             {isPhone ? (
               <div
                 className={`${styles.countdown} flex flex-col space-y-2 sm:grid sm:grid-cols-2 md:grid-cols-4 sm:gap-4`}
@@ -248,11 +234,8 @@ const BirthdayCountdown = () => {
               >
                 {[
                   { value: days, label: 'Days' },
-
                   { value: hours, label: 'Hours' },
-
                   { value: minutes, label: 'Minutes' },
-
                   { value: seconds, label: 'Seconds' },
                 ].map(({ value, label }) => (
                   <div
@@ -273,26 +256,18 @@ const BirthdayCountdown = () => {
                 ))}
               </div>
             )}
-            <div
-              className={`${styles.infoSection} grid grid-cols-1 md:grid-cols-2 gap-6 mb-8`}
-            >
-              <div
-                className={`${styles.infoItem} bg-purple-500/20 rounded-lg p-4`}
-              >
-                <p className="text-xl font-bold text-purple-200">
-                  HRT Progress
-                </p>
+
+            <div className={`${styles.infoSection} grid grid-cols-1 md:grid-cols-2 gap-6 mb-8`}>
+              <div className={`${styles.infoItem} bg-purple-500/20 rounded-lg p-4`}>
+                <p className="text-xl font-bold text-purple-200">HRT Progress</p>
                 <p className="text-2xl font-semibold">{hrtInfo}</p>
               </div>
-              <div
-                className={`${styles.infoItem} bg-indigo-500/20 rounded-lg p-4`}
-              >
-                <p className="text-xl font-bold text-indigo-200">
-                  Dating Progress
-                </p>
+              <div className={`${styles.infoItem} bg-indigo-500/20 rounded-lg p-4`}>
+                <p className="text-xl font-bold text-indigo-200">Dating Progress</p>
                 <p className="text-2xl font-semibold">{datingInfo}</p>
               </div>
             </div>
+
             <div className="mt-8 sm:mt-12">
               <div
                 className={`${styles.gifContainer} rounded-xl overflow-hidden shadow-lg cursor-pointer w-[200px] h-[200px] mx-auto`}
@@ -307,8 +282,10 @@ const BirthdayCountdown = () => {
                 />
               </div>
             </div>
+
+            {/* Ensure AnimatePresence always has a valid child or null */}
             <AnimatePresence>
-              {showAllGifs && (
+              {showAllGifs ? (
                 <motion.div
                   animate={{ opacity: 1 }}
                   className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4"
@@ -339,7 +316,7 @@ const BirthdayCountdown = () => {
                     ))}
                   </div>
                 </motion.div>
-              )}
+              ) : null}
             </AnimatePresence>
           </div>
         </div>

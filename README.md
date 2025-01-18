@@ -2,7 +2,7 @@
 
 Welcome to Hana's Personal Tracker! This React-based web application provides a fun and interactive way to keep track of important dates, milestones, and events in Hana's life.
 
-You can visit the site [here](https://hrt-bday-counter-a5devo3l5-shinniuwus-projects.vercel.app).
+You can visit the site [here](https://hrt-bday-counter.vercel.app/).
 
 ## Features
 
