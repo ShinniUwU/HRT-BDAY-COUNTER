@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 15, 23, 42;
+  --background-end-rgb: 30, 41, 59;
+  --accent-pink: 219, 39, 119;
+  --accent-purple: 147, 51, 234;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom right, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
+  min-height: 100vh;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(var(--accent-pink), 0.1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(var(--accent-pink), 0.2);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(var(--accent-pink), 0.1);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Ambient background animation */
+@keyframes ambient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ambient-bg {
+  background-size: 200% 200%;
+  animation: ambient-shift 15s ease infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(219, 39, 119, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(219, 39, 119, 0.3);
+}
+
