@@ -5,7 +5,14 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "Hana's Personal Dashboard",
   description: "A personal tracker dashboard with important dates and countdowns",
+  icons: {
+    icon: [
+      { url: "/ico.png", rel: "icon", sizes: "any" },
+    ]
+  }
 }
+
+
 
 export default function RootLayout({
   children,
