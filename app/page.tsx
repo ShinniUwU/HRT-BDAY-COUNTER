@@ -2,21 +2,28 @@
 
 import { useState, useEffect } from "react"
 import { Outfit } from "next/font/google"
-import { format, differenceInDays, differenceInMonths, differenceInSeconds } from "date-fns"
+import {
+  format,
+  differenceInDays,
+  differenceInMonths,
+  differenceInSeconds,
+  differenceInYears,
+} from "date-fns"
 import { motion } from "framer-motion"
 
 const outfit = Outfit({ subsets: ["latin"] })
 
 export default function Home() {
   // Date constants
-  const HRT_START_DATE = new Date("2023-10-13")
   const BIRTHDAY_DATE = new Date("2025-04-05")
+  const BIRTH_DATE = new Date("2005-04-05") // For calculating your actual age
+  const HRT_START_DATE = new Date("2023-10-13")
   const RELATIONSHIP_START_DATE = new Date("2024-09-01")
 
   // State for current time
   const [currentTime, setCurrentTime] = useState(new Date())
 
-  // Time format toggle (12h / 24h)
+  // State for time format (12h / 24h)
   const [timeFormat, setTimeFormat] = useState<"12h" | "24h">("12h")
 
   // Update time every second
@@ -53,11 +60,16 @@ export default function Home() {
     return { days, hours, minutes, seconds }
   }
 
+  // Calculate current age dynamically
+  const calculateAge = () => {
+    return differenceInYears(currentTime, BIRTH_DATE)
+  }
+
   // Calculate HRT progress
   const calculateHRTProgress = () => {
     const months = differenceInMonths(currentTime, HRT_START_DATE)
     const totalDaysInHRT = differenceInDays(currentTime, HRT_START_DATE)
-    // Simple approximation for "days" in the current partial month
+    // Simple approximation for days in the partial month
     const daysInCurrentMonth = totalDaysInHRT - months * 30
     return { months, days: daysInCurrentMonth }
   }
@@ -68,6 +80,7 @@ export default function Home() {
   }
 
   const countdown = calculateCountdown()
+  const age = calculateAge()
   const hrtProgress = calculateHRTProgress()
   const relationshipDays = calculateRelationshipDays()
 
@@ -118,7 +131,6 @@ export default function Home() {
             <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">
               CURRENT TIME (BULGARIA)
             </h2>
-            {/* Time display with chosen format */}
             <p className="text-5xl font-light tracking-tight">
               {format(currentTime, timeFormat === "24h" ? "HH:mm:ss" : "hh:mm:ss aa")}
             </p>
@@ -126,7 +138,7 @@ export default function Home() {
               {format(currentTime, "EEEE, MMMM do, yyyy")}
             </p>
 
-            {/* (Optional) Debug text */}
+            {/* Debug text (optional) */}
             <p className="text-xs text-slate-600 mt-1">
               Current Format: <strong>{timeFormat}</strong>
             </p>
@@ -148,20 +160,18 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* Birthday Countdown Block (md:col-span-5) but bigger text & spacing to fill it up */}
+          {/* Birthday Countdown Block (md:col-span-5) + age info */}
           <motion.div
             variants={itemVariants}
             whileHover={{ boxShadow: "0 0 25px rgba(219, 39, 119, 0.15)" }}
             className="md:col-span-5 bg-slate-800/40 backdrop-blur-md p-6 rounded-2xl border border-slate-700/50 shadow-lg relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-
             <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">
               BIRTHDAY COUNTDOWN
             </h2>
             <div className="grid grid-cols-4 gap-4 mt-4">
               <div className="flex flex-col items-center">
-                {/* Enlarge the numbers to fill space */}
                 <span className="text-4xl font-light">{countdown.days}</span>
                 <span className="text-xs text-slate-400 tracking-wide">days</span>
               </div>
@@ -180,6 +190,11 @@ export default function Home() {
             </div>
             <p className="text-slate-400 text-xs mt-4 text-center tracking-wide">
               until April 5, 2025
+            </p>
+
+            {/* Dynamic Age Display */}
+            <p className="text-slate-400 text-xs mt-2 text-center tracking-wide">
+              You are currently <span className="text-pink-300 font-medium">{age}</span> years old
             </p>
           </motion.div>
 
