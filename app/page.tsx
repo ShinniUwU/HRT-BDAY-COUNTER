@@ -194,7 +194,7 @@ export default function Home() {
 
             {/* Dynamic Age Display */}
             <p className="text-slate-400 text-xs mt-2 text-center tracking-wide">
-              You are currently <span className="text-pink-300 font-medium">{age}</span> years old
+              I am currently <span className="text-pink-300 font-medium">{age}</span> years old
             </p>
           </motion.div>
 
