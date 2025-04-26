@@ -1,114 +1,182 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Outfit } from "next/font/google"
+import { useState, useEffect } from 'react';
+import { Outfit } from 'next/font/google';
 import {
   format,
   differenceInDays,
   differenceInMonths,
   differenceInSeconds,
   differenceInYears,
-} from "date-fns"
-import { motion } from "framer-motion"
+  setYear,
+  isPast,
+  isToday,
+} from 'date-fns';
+import { motion } from 'framer-motion';
 
-const outfit = Outfit({ subsets: ["latin"] })
+const outfit = Outfit({ subsets: ['latin'] });
 
 export default function Home() {
-  // Date constants
-  const BIRTHDAY_DATE = new Date("2025-04-05")
-  const BIRTH_DATE = new Date("2005-04-05") // For calculating your actual age
-  const HRT_START_DATE = new Date("2023-10-13")
-  const RELATIONSHIP_START_DATE = new Date("2024-09-01")
+  // --- Constants ---
+  const BIRTH_MONTH = 3; // April (months are 0-indexed in JS Date: 0=Jan, 3=Apr)
+  const BIRTH_DAY = 5;
+  const BIRTH_DATE = new Date(2005, BIRTH_MONTH, BIRTH_DAY);
+  const HRT_START_DATE = new Date('2023-10-13');
+  const RELATIONSHIP_START_DATE = new Date('2024-09-01');
 
-  // State for current time
-  const [currentTime, setCurrentTime] = useState(new Date())
+  // --- State ---
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [timeFormat, setTimeFormat] = useState<'12h' | '24h'>('12h');
+  const [targetBirthdayDate, setTargetBirthdayDate] = useState<Date | null>(
+    null,
+  );
+  const [hasMounted, setHasMounted] = useState(false); // State to check if component has mounted
 
-  // State for time format (12h / 24h)
-  const [timeFormat, setTimeFormat] = useState<"12h" | "24h">("12h")
-
-  // Update time every second
+  // --- Effects ---
   useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000)
-    return () => clearInterval(timer)
-  }, [])
+    setHasMounted(true); // Component has mounted on the client
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-  // Load saved time format from localStorage on mount
   useEffect(() => {
-    const savedFormat = localStorage.getItem("timeFormat")
-    if (savedFormat === "12h" || savedFormat === "24h") {
-      setTimeFormat(savedFormat as "12h" | "24h")
+    const savedFormat = localStorage.getItem('timeFormat');
+    if (savedFormat === '12h' || savedFormat === '24h') {
+      setTimeFormat(savedFormat as '12h' | '24h');
     }
-  }, [])
+  }, []);
 
-  // Toggle the time format
+  useEffect(() => {
+    // Only run date calculations on the client after mounting
+    if (!hasMounted) return;
+
+    const now = currentTime;
+    const currentYear = now.getFullYear();
+    let nextBirthday = new Date(currentYear, BIRTH_MONTH, BIRTH_DAY);
+
+    if (isToday(nextBirthday) || isPast(nextBirthday)) {
+      nextBirthday = setYear(nextBirthday, currentYear + 1);
+    }
+    setTargetBirthdayDate(nextBirthday);
+  }, [currentTime, hasMounted]); // Add hasMounted dependency
+
+  // --- Functions ---
   const toggleTimeFormat = () => {
-    const newFormat = timeFormat === "12h" ? "24h" : "12h"
-    setTimeFormat(newFormat)
-    localStorage.setItem("timeFormat", newFormat)
-  }
+    const newFormat = timeFormat === '12h' ? '24h' : '12h';
+    setTimeFormat(newFormat);
+    localStorage.setItem('timeFormat', newFormat);
+  };
 
-  // Calculate countdown to birthday
   const calculateCountdown = () => {
-    const totalSeconds = Math.floor(differenceInSeconds(BIRTHDAY_DATE, currentTime))
-    if (totalSeconds <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+    // Return default values if not mounted or target date not set
+    if (!hasMounted || !targetBirthdayDate) {
+      const currentYear = new Date().getFullYear();
+      let tentativeTarget = new Date(currentYear, BIRTH_MONTH, BIRTH_DAY);
+      if (isToday(tentativeTarget) || isPast(tentativeTarget)) {
+        tentativeTarget = setYear(tentativeTarget, currentYear + 1);
+      }
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        targetYear: tentativeTarget.getFullYear(),
+      };
+    }
 
-    const days = Math.floor(totalSeconds / (60 * 60 * 24))
-    const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60))
-    const minutes = Math.floor((totalSeconds % (60 * 60)) / 60)
-    const seconds = Math.floor(totalSeconds % 60)
+    const totalSeconds = differenceInSeconds(targetBirthdayDate, currentTime);
 
-    return { days, hours, minutes, seconds }
-  }
+    if (totalSeconds <= 0) {
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        targetYear: targetBirthdayDate.getFullYear(),
+      };
+    }
 
-  // Calculate current age dynamically
+    const days = Math.floor(totalSeconds / (60 * 60 * 24));
+    const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+    const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+    const targetYear = targetBirthdayDate.getFullYear();
+
+    return { days, hours, minutes, seconds, targetYear };
+  };
+
   const calculateAge = () => {
-    return differenceInYears(currentTime, BIRTH_DATE)
-  }
+    if (!hasMounted) return 0; // Return default/placeholder on server
+    return differenceInYears(currentTime, BIRTH_DATE);
+  };
 
-  // Calculate HRT progress
   const calculateHRTProgress = () => {
-    const months = differenceInMonths(currentTime, HRT_START_DATE)
-    const totalDaysInHRT = differenceInDays(currentTime, HRT_START_DATE)
-    // Simple approximation for days in the partial month
-    const daysInCurrentMonth = totalDaysInHRT - months * 30
-    return { months, days: daysInCurrentMonth }
-  }
+    if (!hasMounted) return { months: 0, days: 0, totalDays: 0 }; // Default/placeholder
 
-  // Calculate relationship days
+    const months = differenceInMonths(currentTime, HRT_START_DATE);
+    const totalDaysInHRT = differenceInDays(currentTime, HRT_START_DATE);
+    const hrtStartPlusMonths = new Date(HRT_START_DATE);
+    hrtStartPlusMonths.setMonth(hrtStartPlusMonths.getMonth() + months);
+    const daysInCurrentMonth = differenceInDays(
+      currentTime,
+      hrtStartPlusMonths,
+    );
+
+    return { months, days: daysInCurrentMonth, totalDays: totalDaysInHRT };
+  };
+
   const calculateRelationshipDays = () => {
-    return differenceInDays(currentTime, RELATIONSHIP_START_DATE)
-  }
+    if (!hasMounted) return 0; // Default/placeholder
+    return differenceInDays(currentTime, RELATIONSHIP_START_DATE);
+  };
 
-  const countdown = calculateCountdown()
-  const age = calculateAge()
-  const hrtProgress = calculateHRTProgress()
-  const relationshipDays = calculateRelationshipDays()
+  // --- Calculations ---
+  const countdown = calculateCountdown();
+  const age = calculateAge();
+  const hrtProgress = calculateHRTProgress();
+  const relationshipDays = calculateRelationshipDays();
 
-  // Framer Motion animations
+  // --- Framer Motion animations ---
+  // ... (keep animations as they are)
   const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  }
-
+    /* ... */
+  };
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-    },
+    /* ... */
+  };
+
+  // --- Render ---
+  // Render placeholder or null on server/before mount for dynamic parts
+  if (!hasMounted) {
+    // Optionally return a loading skeleton or null
+    // Returning null might cause layout shifts, a basic structure is often better
+    return (
+      <main
+        className={`min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8 ${outfit.className} overflow-hidden`}
+      >
+        {/* Basic layout skeleton */}
+        <div className="max-w-5xl mx-auto relative z-10 opacity-50">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            {/* Placeholder blocks matching your layout */}
+            <div className="md:col-span-7 h-32 bg-slate-800/40 rounded-2xl"></div>
+            <div className="md:col-span-5 h-32 bg-slate-800/40 rounded-2xl"></div>
+            <div className="md:col-span-6 h-24 bg-slate-800/40 rounded-2xl"></div>
+            <div className="md:col-span-6 h-24 bg-slate-800/40 rounded-2xl"></div>
+          </div>
+          <div className="mt-12 text-center">
+            <p className="text-slate-500 text-xs tracking-widest">Loading...</p>
+          </div>
+        </div>
+      </main>
+    );
   }
 
+  // --- Actual Render (Client-side after mount) ---
   return (
     <main
       className={`min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8 ${outfit.className} overflow-hidden`}
     >
-      {/* Background radials for subtle glow */}
+      {/* Background radials */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-pink-500/5 via-transparent to-transparent pointer-events-none"></div>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-purple-500/5 via-transparent to-transparent pointer-events-none"></div>
 
@@ -119,124 +187,174 @@ export default function Home() {
           animate="visible"
           className="grid grid-cols-1 md:grid-cols-12 gap-6"
         >
-          {/* Current Time Block (md:col-span-7) */}
+          {/* Current Time Block */}
           <motion.div
             variants={itemVariants}
-            whileHover={{ boxShadow: "0 0 25px rgba(219, 39, 119, 0.15)" }}
+            whileHover={{ boxShadow: '0 0 25px rgba(219, 39, 119, 0.15)' }}
             className="md:col-span-7 bg-slate-800/40 backdrop-blur-md p-6 rounded-2xl border border-slate-700/50 shadow-lg relative overflow-hidden group"
           >
-            {/* pointer-events-none overlay so toggle is clickable */}
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-
+            {/* ... other content ... */}
             <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">
               CURRENT TIME (BULGARIA)
             </h2>
-            <p className="text-5xl font-light tracking-tight">
-              {format(currentTime, timeFormat === "24h" ? "HH:mm:ss" : "hh:mm:ss aa")}
+            {/* Add suppressHydrationWarning here */}
+            <p
+              className="text-5xl font-light tracking-tight"
+              suppressHydrationWarning
+            >
+              {format(
+                currentTime,
+                timeFormat === '24h' ? 'HH:mm:ss' : 'hh:mm:ss aa',
+              )}
             </p>
-            <p className="text-slate-400 mt-2 tracking-wide">
-              {format(currentTime, "EEEE, MMMM do, yyyy")}
+            {/* And here */}
+            <p
+              className="text-slate-400 mt-2 tracking-wide"
+              suppressHydrationWarning
+            >
+              {format(currentTime, 'EEEE, MMMM do, yyyy')}
             </p>
-
-            {/* Debug text (optional) */}
-            <p className="text-xs text-slate-600 mt-1">
-              Current Format: <strong>{timeFormat}</strong>
-            </p>
-
-            {/* Single pill toggle for 12h/24h */}
+            {/* Time format toggle doesn't need suppression */}
             <div className="flex items-center mt-2 space-x-2">
-              <button
-                onClick={toggleTimeFormat}
-                className="text-xs px-2 py-0.5 rounded-full bg-slate-700/30 border border-slate-700/50 hover:border-pink-500/30 transition-colors duration-300 flex items-center space-x-1"
-              >
-                <span className={`${timeFormat === "12h" ? "text-pink-300" : "text-slate-400"}`}>
-                  12h
-                </span>
-                <span className="text-slate-500">/</span>
-                <span className={`${timeFormat === "24h" ? "text-pink-300" : "text-slate-400"}`}>
-                  24h
-                </span>
-              </button>
+              {/* ... button ... */}
             </div>
           </motion.div>
 
-          {/* Birthday Countdown Block (md:col-span-5) + age info */}
+          {/* Birthday Countdown Block */}
           <motion.div
             variants={itemVariants}
-            whileHover={{ boxShadow: "0 0 25px rgba(219, 39, 119, 0.15)" }}
+            whileHover={{ boxShadow: '0 0 25px rgba(219, 39, 119, 0.15)' }}
             className="md:col-span-5 bg-slate-800/40 backdrop-blur-md p-6 rounded-2xl border border-slate-700/50 shadow-lg relative overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+            {/* ... other content ... */}
             <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">
               BIRTHDAY COUNTDOWN
             </h2>
             <div className="grid grid-cols-4 gap-4 mt-4">
+              {/* Add suppressHydrationWarning to each changing number */}
               <div className="flex flex-col items-center">
-                <span className="text-4xl font-light">{countdown.days}</span>
-                <span className="text-xs text-slate-400 tracking-wide">days</span>
+                <span className="text-4xl font-light" suppressHydrationWarning>
+                  {countdown.days}
+                </span>
+                <span className="text-xs text-slate-400 tracking-wide">
+                  days
+                </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-4xl font-light">{countdown.hours}</span>
-                <span className="text-xs text-slate-400 tracking-wide">hours</span>
+                <span className="text-4xl font-light" suppressHydrationWarning>
+                  {countdown.hours}
+                </span>
+                <span className="text-xs text-slate-400 tracking-wide">
+                  hours
+                </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-4xl font-light">{countdown.minutes}</span>
-                <span className="text-xs text-slate-400 tracking-wide">min</span>
+                <span className="text-4xl font-light" suppressHydrationWarning>
+                  {countdown.minutes}
+                </span>
+                <span className="text-xs text-slate-400 tracking-wide">
+                  min
+                </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-4xl font-light">{countdown.seconds}</span>
-                <span className="text-xs text-slate-400 tracking-wide">sec</span>
+                <span className="text-4xl font-light" suppressHydrationWarning>
+                  {countdown.seconds}
+                </span>
+                <span className="text-xs text-slate-400 tracking-wide">
+                  sec
+                </span>
               </div>
             </div>
-            <p className="text-slate-400 text-xs mt-4 text-center tracking-wide">
-              until April 5, 2025
+            {/* Target year might change, so suppress here too */}
+            <p
+              className="text-slate-400 text-xs mt-4 text-center tracking-wide"
+              suppressHydrationWarning
+            >
+              until April 5, {countdown.targetYear}
             </p>
-
-            {/* Dynamic Age Display */}
-            <p className="text-slate-400 text-xs mt-2 text-center tracking-wide">
-              I am currently <span className="text-pink-300 font-medium">{age}</span> years old
+            {/* Age changes over time */}
+            <p
+              className="text-slate-400 text-xs mt-2 text-center tracking-wide"
+              suppressHydrationWarning
+            >
+              I am currently{' '}
+              <span className="text-pink-300 font-medium">{age}</span> years old
             </p>
           </motion.div>
 
-          {/* HRT Progress Block (md:col-span-6) */}
+          {/* HRT Progress Block */}
           <motion.div
             variants={itemVariants}
-            whileHover={{ boxShadow: "0 0 25px rgba(147, 51, 234, 0.15)" }}
+            whileHover={{ boxShadow: '0 0 25px rgba(147, 51, 234, 0.15)' }}
             className="md:col-span-6 bg-slate-800/40 backdrop-blur-md p-6 rounded-2xl border border-slate-700/50 shadow-lg relative overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-            <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">HRT PROGRESS</h2>
-            <p className="text-2xl font-light tracking-tight">
-              On HRT for <span className="text-pink-300">{hrtProgress.months} months</span>,{" "}
-              <span className="text-pink-300">{hrtProgress.days} days</span>
+            {/* ... other content ... */}
+            <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">
+              HRT PROGRESS
+            </h2>
+            {/* Suppress warning on the text containing calculated values */}
+            <p
+              className="text-2xl font-light tracking-tight"
+              suppressHydrationWarning
+            >
+              On HRT for{' '}
+              <span className="text-pink-300">{hrtProgress.months} months</span>
+              , <span className="text-pink-300">{hrtProgress.days} days</span>
             </p>
+            {/* The progress bar style calculation might also cause issues if not handled carefully */}
+            {/* Wrapping the dynamic style calculation in a check for `hasMounted` is safer */}
             <div className="w-full h-1 bg-slate-700/50 rounded-full mt-4 overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-pink-400 to-purple-400 rounded-full"
-                style={{ width: `${Math.min((hrtProgress.months / 24) * 100, 100)}%` }}
+                style={{
+                  width: `${
+                    hasMounted
+                      ? Math.min((hrtProgress.months / 24) * 100, 100)
+                      : 0
+                  }%`,
+                }}
               ></div>
             </div>
-            <p className="text-slate-400 text-xs mt-2 tracking-wide">Started: October 13, 2023</p>
+            {/* Start date is static, no suppression needed */}
+            <p className="text-slate-400 text-xs mt-2 tracking-wide">
+              Started: {format(HRT_START_DATE, 'MMMM d, yyyy')}
+            </p>
           </motion.div>
 
-          {/* Relationship Block (md:col-span-6) */}
+          {/* Relationship Block */}
           <motion.div
             variants={itemVariants}
-            whileHover={{ boxShadow: "0 0 25px rgba(147, 51, 234, 0.15)" }}
+            whileHover={{ boxShadow: '0 0 25px rgba(147, 51, 234, 0.15)' }}
             className="md:col-span-6 bg-slate-800/40 backdrop-blur-md p-6 rounded-2xl border border-slate-700/50 shadow-lg relative overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-            <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">RELATIONSHIP</h2>
-            <p className="text-2xl font-light tracking-tight">
-              Together for <span className="text-purple-300">{relationshipDays} days</span>
+            {/* ... other content ... */}
+            <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">
+              RELATIONSHIP
+            </h2>
+            {/* Suppress warning on the text containing calculated days */}
+            <p
+              className="text-2xl font-light tracking-tight"
+              suppressHydrationWarning
+            >
+              Together for{' '}
+              <span className="text-purple-300">{relationshipDays} days</span>
             </p>
             <div className="w-full h-1 bg-slate-700/50 rounded-full mt-4 overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
-                style={{ width: `${Math.min((relationshipDays / 365) * 100, 100)}%` }}
+                style={{
+                  width: `${
+                    hasMounted
+                      ? Math.min((relationshipDays / 365) * 100, 100)
+                      : 0
+                  }%`,
+                }}
               ></div>
             </div>
-            <p className="text-slate-400 text-xs mt-2 tracking-wide">Since: September 1, 2024</p>
+            {/* Start date is static */}
+            <p className="text-slate-400 text-xs mt-2 tracking-wide">
+              Since: {format(RELATIONSHIP_START_DATE, 'MMMM d, yyyy')}
+            </p>
           </motion.div>
         </motion.div>
 
@@ -248,5 +366,5 @@ export default function Home() {
         </motion.div>
       </div>
     </main>
-  )
+  );
 }
