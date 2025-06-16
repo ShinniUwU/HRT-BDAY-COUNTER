@@ -17,6 +17,10 @@ import { motion } from 'framer-motion';
 const outfit = Outfit({ subsets: ['latin'] });
 
 export default function Home() {
+  const getBulgarianTime = () => {
+    const now = new Date();
+    return new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Sofia' }));
+  };
   // --- Constants ---
   const BIRTH_MONTH = 3; // April (months are 0-indexed in JS Date: 0=Jan, 3=Apr)
   const BIRTH_DAY = 5;
@@ -25,7 +29,7 @@ export default function Home() {
   const RELATIONSHIP_START_DATE = new Date('2024-09-01');
 
   // --- State ---
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState(getBulgarianTime());
   const [timeFormat, setTimeFormat] = useState<'12h' | '24h'>('12h');
   const [targetBirthdayDate, setTargetBirthdayDate] = useState<Date | null>(
     null,
@@ -35,7 +39,7 @@ export default function Home() {
   // --- Effects ---
   useEffect(() => {
     setHasMounted(true); // Component has mounted on the client
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    const timer = setInterval(() => setCurrentTime(getBulgarianTime()), 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -70,7 +74,7 @@ export default function Home() {
   const calculateCountdown = () => {
     // Return default values if not mounted or target date not set
     if (!hasMounted || !targetBirthdayDate) {
-      const currentYear = new Date().getFullYear();
+      const currentYear = getBulgarianTime().getFullYear();
       let tentativeTarget = new Date(currentYear, BIRTH_MONTH, BIRTH_DAY);
       if (isToday(tentativeTarget) || isPast(tentativeTarget)) {
         tentativeTarget = setYear(tentativeTarget, currentYear + 1);
