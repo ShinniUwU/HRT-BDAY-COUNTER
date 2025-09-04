@@ -28,4 +28,4 @@ export default function RootLayout({
 
 
 
-import './globals.css'
+// (duplicate import removed)
