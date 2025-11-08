@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -10,6 +10,14 @@ export const metadata: Metadata = {
       { url: "/ico.png", rel: "icon", sizes: "any" },
     ]
   }
+}
+
+export const viewport: Viewport = {
+  themeColor: "#0f172a",
+  colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 
