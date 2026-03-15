@@ -1,27 +1,24 @@
-import { Outfit } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
 import Widgets from '@/components/Widgets';
 
-const outfit = Outfit({ subsets: ['latin'] });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'] });
 
 export const runtime = 'edge';
-
 
 export default function Home() {
   return (
     <main
-      className={`min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8 ${outfit.className} overflow-hidden`}
+      className={`min-h-screen bg-[#090909] text-slate-100 p-6 md:p-10 ${jetbrainsMono.className}`}
+      style={{
+        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)',
+        backgroundSize: '28px 28px',
+      }}
     >
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at top right, rgba(236,72,153,0.05) 0%, transparent 70%)' }} />
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at bottom left, rgba(168,85,247,0.05) 0%, transparent 70%)' }} />
-
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-xl mx-auto flex flex-col min-h-[calc(100vh-5rem)] justify-center gap-10">
         <Widgets />
-
-        <div className="mt-12 text-center">
-          <p className="text-slate-500 text-xs tracking-widest">
-            Made with <span className="text-pink-400">♥</span> by Hana
-          </p>
-        </div>
+        <p className="text-slate-800 text-xs tracking-widest text-center">
+          made with ♥ by hana
+        </p>
       </div>
     </main>
   );

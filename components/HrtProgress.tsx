@@ -1,44 +1,100 @@
 "use client";
 
-import { useMemo } from "react";
-import { differenceInDays, differenceInMonths, format } from "date-fns";
-import { motion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
+import { differenceInDays, differenceInMonths, differenceInYears, format } from "date-fns";
 import { useNow } from "@/hooks/useNow";
 
 const HRT_START_DATE = new Date("2023-10-13");
 
+type Mode = "mo" | "d" | "y";
+const MODES: Mode[] = ["mo", "d", "y"];
+
 export default function HrtProgress() {
   const now = useNow({ timeZone: "Europe/Sofia", intervalMs: 1000 });
+  const [mode, setMode] = useState<Mode>("mo");
 
-  const { months, days } = useMemo(() => {
-    const m = differenceInMonths(now, HRT_START_DATE);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("hrtMode");
+      if (saved === "d" || saved === "mo" || saved === "y") setMode(saved as Mode);
+    } catch {}
+  }, []);
+
+  function cycleMode() {
+    setMode(prev => {
+      const next = MODES[(MODES.indexOf(prev) + 1) % MODES.length];
+      try { localStorage.setItem("hrtMode", next); } catch {}
+      return next;
+    });
+  }
+
+  const data = useMemo(() => {
+    const totalDays = differenceInDays(now, HRT_START_DATE);
+    const totalMonths = differenceInMonths(now, HRT_START_DATE);
     const anchor = new Date(HRT_START_DATE);
-    anchor.setMonth(anchor.getMonth() + m);
-    const d = differenceInDays(now, anchor);
-    return { months: m, days: d };
+    anchor.setMonth(anchor.getMonth() + totalMonths);
+    const remDays = differenceInDays(now, anchor);
+    const years = differenceInYears(now, HRT_START_DATE);
+    const afterYears = new Date(HRT_START_DATE);
+    afterYears.setFullYear(afterYears.getFullYear() + years);
+    const months = differenceInMonths(now, afterYears);
+    const afterMonths = new Date(afterYears);
+    afterMonths.setMonth(afterMonths.getMonth() + months);
+    const days = differenceInDays(now, afterMonths);
+    return { totalDays, totalMonths, remDays, years, months, days };
   }, [now]);
 
-  const percent = useMemo(() => Math.min((months / 24) * 100, 100), [months]);
-
   return (
-    <motion.div
-      whileHover={{ boxShadow: "0 0 25px rgba(147, 51, 234, 0.15)" }}
-      className="md:col-span-6 bg-slate-800/40 backdrop-blur-md p-6 rounded-2xl border border-slate-700/50 shadow-lg relative overflow-hidden group"
-    >
-      <h2 className="text-slate-400 text-sm font-medium mb-2 tracking-wide">HRT PROGRESS</h2>
-      <p className="text-2xl font-light tracking-tight" suppressHydrationWarning>
-        On HRT for <span className="text-pink-300">{months} months</span>, {" "}
-        <span className="text-pink-300">{days} days</span>
+    <div className="md:col-span-6 border border-white/5 rounded-lg p-4 flex flex-col gap-3">
+      <p className="text-slate-700 text-xs tracking-widest">hrt · oct 2023</p>
+
+      <button
+        type="button"
+        onClick={cycleMode}
+        className="text-left group cursor-pointer"
+        title="click to change unit"
+        suppressHydrationWarning
+      >
+        {mode === "d" && (
+          <p className="text-4xl font-light leading-none tabular-nums">
+            <span className="text-slate-100">{data.totalDays}</span>
+            <span className="text-slate-600 text-lg ml-1">d</span>
+          </p>
+        )}
+        {mode === "mo" && (
+          <p className="text-4xl font-light leading-none tabular-nums">
+            <span className="text-slate-100">{data.totalMonths}</span>
+            <span className="text-slate-600 text-lg ml-1">mo</span>
+            <span className="text-slate-800 text-2xl mx-2">·</span>
+            <span className="text-slate-400">{data.remDays}</span>
+            <span className="text-slate-700 text-lg ml-1">d</span>
+          </p>
+        )}
+        {mode === "y" && (
+          <p className="text-4xl font-light leading-none tabular-nums">
+            <span className="text-slate-100">{data.years}</span>
+            <span className="text-slate-600 text-lg ml-1">y</span>
+            <span className="text-slate-800 text-2xl mx-2">·</span>
+            <span className="text-slate-400">{data.months}</span>
+            <span className="text-slate-700 text-lg ml-1">mo</span>
+            <span className="text-slate-800 text-2xl mx-2">·</span>
+            <span className="text-slate-600">{data.days}</span>
+            <span className="text-slate-700 text-lg ml-1">d</span>
+          </p>
+        )}
+        <p className="text-slate-800 text-xs mt-2 group-hover:text-slate-600 transition-colors">
+          {MODES.map((m, i) => (
+            <span key={m}>
+              <span className={m === mode ? "text-slate-400" : ""}>{m}</span>
+              {i < MODES.length - 1 && <span className="mx-1">/</span>}
+            </span>
+          ))}
+        </p>
+      </button>
+
+      <p className="text-slate-800 text-xs mt-auto">
+        since {format(HRT_START_DATE, "MMM d, yyyy")}
       </p>
-      <div className="w-full h-1 bg-slate-700/50 rounded-full mt-4 overflow-hidden" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100} aria-label="HRT progress">
-        <div
-          className="h-full bg-gradient-to-r from-pink-400 to-purple-400 rounded-full"
-          style={{ width: `${percent}%` }}
-        />
-      </div>
-      <p className="text-slate-400 text-xs mt-2 tracking-wide">
-        Started: {format(HRT_START_DATE, "MMMM d, yyyy")}
-      </p>
-    </motion.div>
+    </div>
   );
 }
